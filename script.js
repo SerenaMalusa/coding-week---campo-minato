@@ -36,6 +36,10 @@ GRIGLIA E LOGICA DI GIOCO
 let isCellEven = false;
 let isRowEven = false;
 
+grid.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+});
+
 for (let i = 1; i <= totalCells; i++) {
   // Creo un elemento e gli do la classe 'cell'
   const cell = document.createElement('div');
@@ -55,8 +59,8 @@ for (let i = 1; i <= totalCells; i++) {
 
   // # Gestiamo il click della cella
   cell.addEventListener('click', function () {
-    // ! Controllo che la cella non sia stata già cliccata
-    if (cell.classList.contains('cell-clicked')) return;
+    // ! Controllo che la cella non sia stata già cliccata e non abbia la bandierina
+    if (cell.classList.contains('cell-clicked') || cell.classList.contains('red-flag')) return;
 
     // Se è il tesoro
     if (treasure.includes(i)) {
@@ -70,12 +74,10 @@ for (let i = 1; i <= totalCells; i++) {
       // cambio lo sfondo della schermata 
       endGameScreen.classList.add('win-treasure');
       endGameText.innerHTML = 'MAX<br>SCORE!';
-      /*playAgainButton.onclick = function {
-        window.element.open('https://www.google.com');*/
-            
-        return;
+                 
+      return;
       
-      }      
+    }      
 
     if (bombsList.includes(i)) {
       // Se è una bomba....
@@ -89,10 +91,35 @@ for (let i = 1; i <= totalCells; i++) {
       //inserisco il numero di bombe come testo nella cella
       //countCloseBombs(i);
       const closeBombsNum = countCloseBombs(i);
-      console.log('Bombe vicine=',closeBombsNum);
+      //console.log('Bombe vicine=',closeBombsNum);
       cell.innerHTML = '<p>'+closeBombsNum+'</p>';
     }
+
+        
   });
+
+  // gestisco il rightClick della cella 
+  cell.addEventListener("contextmenu", function() {
+
+    // ! Controllo che la cella non sia stata già cliccata
+    if (cell.classList.contains('cell-clicked')) {
+
+      return
+
+    } else if (cell.classList.contains('red-flag')) {
+
+      // faccio sparire la bandierina
+      cell.classList.remove('red-flag');
+
+    } else {
+
+      // faccio apparire la bandierina
+      cell.classList.add('red-flag');
+
+    }
+
+  });
+
 
   // Lo inserisco nella griglia
   grid.appendChild(cell);

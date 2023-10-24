@@ -100,6 +100,14 @@ h1 {
 	background-position: center;
 }
 
+.red-flag {
+	/*background-color: rgb(197, 33, 82);*/
+	background-image: url('images/red-flag.png');
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
 /* Schermata di fine gioco */
 .end-game-screen {
 	background-color: rgba(241, 117, 78, 0.6);
