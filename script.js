@@ -169,7 +169,27 @@ function endGame(isVictory) {
 
 // Funzione per ricaricare la pagina
 function playAgain() {
-  location.reload();
+
+  //se ho vinto con il tesoro
+  if (endGameScreen.classList.contains('win-treasure')){
+
+    //recupero la finestra sorpresa
+    const rickrollWindow = document.querySelector('.rickrolling');
+    rickrollWindow.classList.remove('hidden');
+
+    //faccio funzionare il btn per la chiusura
+    const closeButton = document.querySelector('.rickrolling-btn');
+    closeButton.addEventListener('click', function() {
+
+      rickrollWindow.classList.add('hidden');
+
+    })
+
+  } else {
+
+    location.reload();
+
+  }
 }
 
 // # BONUS
