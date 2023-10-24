@@ -172,13 +172,27 @@ function countCloseBombs(cellIndex) {
   //riprendo tutte le celle 
   for (let i = 1; i <= totalCells; i++) {
 
-    // se le 3 celle sopra sono in bombsList
-    if ((cellIndex-11 == i || cellIndex-10 == i || cellIndex-9 == i || cellIndex-1 == i || cellIndex+1 == i || cellIndex+9 == i || cellIndex+10 == i || cellIndex+11 == i)  &&  bombsList.includes(i)) {
+    if (cellIndex % 10 === 0) {
 
-      //le aggiongo a closeBombs
-      closeBombs.push(i);
+      // se le 3 celle sopra sono in bombsList
+      if ((cellIndex-11 == i || cellIndex-10 == i || cellIndex-1 == i  || cellIndex+9 == i || cellIndex+10 == i)  &&  bombsList.includes(i)) {
 
-    } 
+        //le aggiongo a closeBombs
+        closeBombs.push(i);
+
+      } 
+
+    } else {
+
+      // se le 3 celle sopra sono in bombsList
+      if ((cellIndex-11 == i || cellIndex-10 == i || cellIndex-9 == i || cellIndex-1 == i || cellIndex+1 == i || cellIndex+9 == i || cellIndex+10 == i || cellIndex+11 == i)  &&  bombsList.includes(i)) {
+
+        //le aggiongo a closeBombs
+        closeBombs.push(i);
+
+      } 
+
+    }
 
   }
 
