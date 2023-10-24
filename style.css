@@ -103,7 +103,7 @@ h1 {
 .red-flag {
 	/*background-color: rgb(197, 33, 82);*/
 	background-image: url('images/red-flag.png');
-	background-size: contain;
+	background-size: 35px;
 	background-repeat: no-repeat;
 	background-position: center;
 }
