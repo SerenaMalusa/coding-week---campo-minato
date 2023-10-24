@@ -174,8 +174,18 @@ function countCloseBombs(cellIndex) {
 
     if (cellIndex % 10 === 0) {
 
-      // se le 3 celle sopra sono in bombsList
-      if ((cellIndex-11 == i || cellIndex-10 == i || cellIndex-1 == i  || cellIndex+9 == i || cellIndex+10 == i)  &&  bombsList.includes(i)) {
+      // se le 2 celle sopra, quella a dx e le 2 celle sotto sono in bombsList
+      if ((cellIndex-11 == i || cellIndex-10 == i || cellIndex-1 == i || cellIndex+9 == i || cellIndex+10 == i)  &&  bombsList.includes(i)) {
+
+        //le aggiongo a closeBombs
+        closeBombs.push(i);
+
+      } 
+
+    } else if ((cellIndex - 1) % 10 === 0) {
+
+      // se le 2 celle sopra, quella a sx e le 2 celle sotto sono in bombsList
+      if ((cellIndex-10 == i || cellIndex-9 == i || cellIndex+1 == i || cellIndex+10 == i || cellIndex+11 == i)  &&  bombsList.includes(i)) {
 
         //le aggiongo a closeBombs
         closeBombs.push(i);
@@ -184,7 +194,7 @@ function countCloseBombs(cellIndex) {
 
     } else {
 
-      // se le 3 celle sopra sono in bombsList
+      // se le 3 celle sopra, quelle a dx, a sx e le 3 celle sotto sono in bombsList
       if ((cellIndex-11 == i || cellIndex-10 == i || cellIndex-9 == i || cellIndex-1 == i || cellIndex+1 == i || cellIndex+9 == i || cellIndex+10 == i || cellIndex+11 == i)  &&  bombsList.includes(i)) {
 
         //le aggiongo a closeBombs
@@ -196,6 +206,7 @@ function countCloseBombs(cellIndex) {
 
   }
 
+  //conto solo quante bombe ci sono
   return closeBombs.length;
 }
 
