@@ -9,7 +9,6 @@ const endGameScreen = document.querySelector('.end-game-screen');
 const endGameText = document.querySelector('.end-game-text');
 const playAgainButton = document.querySelector('.play-again');
 const gameContainer = document.querySelector('.game-container');
-const cells = document.querySelectorAll('.cell');
 
 // Preparo delle informazioni utili alla logica di gioco
 const totalCells = 100;
@@ -18,6 +17,7 @@ const maxScore = totalCells - totalBombs - 1;
 const bombsList = [];
 const treasure = [];
 let score = 0;
+let t;
 
 // Generare tesoro random
 treasure.push (Math.floor(Math.random() * 100) +1);
@@ -92,7 +92,11 @@ for (let i = 1; i <= totalCells; i++) {
       //countCloseBombs(i);
       const closeBombsNum = countCloseBombs(i);
       //console.log('Bombe vicine=',closeBombsNum);
-      cell.innerHTML = '<p>'+closeBombsNum+'</p>';
+
+      if (closeBombsNum !== 0) {
+        cell.innerHTML = '<p>'+closeBombsNum+'</p>';
+      };
+  
     }
 
         
@@ -120,12 +124,12 @@ for (let i = 1; i <= totalCells; i++) {
 
   });
 
-
   // Lo inserisco nella griglia
   grid.appendChild(cell);
+  
 }
 
-
+const cells = document.querySelectorAll('.cell');
 
 /* -------------------
 FUNZIONI
@@ -153,14 +157,15 @@ function treasureScore () {
 
 // Funzione per decretare la fine del gioco
 function endGame(isVictory) {
-  if (isVictory === true) {
+  // blocco set interval
+  clearInterval(t);
+  if (isVictory === true) { 
     // Coloriamo di verde e cambiamo il messaggio
     endGameScreen.classList.add('win');
     endGameText.innerHTML = 'YOU<br>WIN';
   } else {
     // Riveliamo le bombe e il tesoro
     revealAll();
-
   }
 
   // Mostriamo la schermata rimuovendo la classe
@@ -214,7 +219,7 @@ function revealAll() {
 
 // Funzione per contare le bombe vicine
 function countCloseBombs(cellIndex) {
-  closeBombs = [];
+  const closeBombs = [];
 
   //riprendo tutte le celle 
   for (let i = 1; i <= totalCells; i++) {
@@ -257,9 +262,75 @@ function countCloseBombs(cellIndex) {
   return closeBombs.length;
 }
 
+//funzione per avviare il controllo delle celle cliccate
+function open () {
+
+  cells.forEach((cell, i) => {
+
+    const closeBombsNum = countCloseBombs(i + 1);
+        
+    if (cell.classList.contains('cell-clicked') && closeBombsNum === 0) {
+
+      //cell.innerHTML = '<p>'+closeBombsNum+'</p>';
+      clickAdiacentCells(i + 1);
+    }
+
+    return;
+
+  });
+}
+
+//funzione per aggiungere la classe cell-clicked 
+function clickAdiacentCells(cellIndex) {
+
+  //riprendo tutte le celle
+  cells.forEach((cell, i) => {
+
+    const closeBombsNum = countCloseBombs(i + 1);
+    //celle tutto a dx
+    if (cellIndex % 10 === 0) {
+
+      // prendo le 2 celle sopra, quella a dx e le 2 celle sotto che non siano un tesoro
+      if ((cellIndex-11 == i+1 || cellIndex-10 == i+1 || cellIndex-1 == i+1 || cellIndex+9 == i+1 || cellIndex+10 == i+1) && !treasure.includes(i+1)) {
+
+        cell.classList.add('cell-clicked');
+        if (closeBombsNum !== 0) {
+          cell.innerHTML = '<p>'+ closeBombsNum + '</p>';
+        }
+
+      }
+    } else if ((cellIndex - 1) % 10 === 0) {
+
+      // prendo le 2 celle sopra, quella a sx e le 2 celle sotto che non sono il tesoro
+      if ((cellIndex-10 == i+1 || cellIndex-9 == i+1 || cellIndex+1 == i+1 || cellIndex+10 == i+1 || cellIndex+11 == i+1)  &&  !treasure.includes(i+1)) {
+
+        cell.classList.add('cell-clicked');
+        if (closeBombsNum !== 0) {
+          cell.innerHTML = '<p>'+ closeBombsNum + '</p>';
+        }
+      }
+    } else {
+
+      // prendo le 3 celle sopra, quelle a dx, a sx e le 3 celle sotto che non sono un tesoro
+      if ((cellIndex-11 == i+1 || cellIndex-10 == i+1 || cellIndex-9 == i+1 || cellIndex-1 == i+1 || cellIndex+1 == i+1 || cellIndex+9 == i+1 || cellIndex+10 == i+1 || cellIndex+11 == i+1)  &&  !treasure.includes(i+1)) {
+
+        cell.classList.add('cell-clicked');
+        if (closeBombsNum !== 0) {
+          cell.innerHTML = '<p>'+ closeBombsNum + '</p>';
+        }
+      }
+    }
+  });
+
+}
+
+
 /* ---------------------
 EVENTI
 -----------------------*/
 
 // Gestiamo il click sul tasto rigioca
 playAgainButton.addEventListener('click', playAgain);
+
+//Intervallo che deve controllare tutte le celle cliccate ogni tot millisecondi
+t = setInterval (open, 100);

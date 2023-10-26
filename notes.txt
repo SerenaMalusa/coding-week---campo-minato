@@ -1,0 +1,55 @@
+//funzione che effettua il controllo delle celle intorno
+function openCloseCells (cellIndex) {
+
+  //riprendo tutte le celle 
+  for (let i = 1; i <= totalCells; i++) {
+
+    //celle tutto a dx
+    if (cellIndex % 10 === 0) {
+
+      // prendo le 2 celle sopra, quella a dx e le 2 celle sotto e conto quante bombe hanno vicine
+      if ((cellIndex-11 == i || cellIndex-10 == i || cellIndex-1 == i || cellIndex+9 == i || cellIndex+10 == i) && !treasure.includes(i) ) {
+
+        openCell(i);
+
+      } 
+
+    } else if ((cellIndex - 1) % 10 === 0) {
+      // prendo le 2 celle sopra, quella a sx e le 2 celle sotto che non sono il tesoro
+      if ((cellIndex-10 == i || cellIndex-9 == i || cellIndex+1 == i || cellIndex+10 == i || cellIndex+11 == i)  &&  !treasure.includes(i)) {
+
+        openCell(i);
+
+      }
+
+    } else {
+
+      // prendo le 3 celle sopra, quelle a dx, a sx e le 3 celle sotto che non sono un tesoro
+      if ((cellIndex-11 == i || cellIndex-10 == i || cellIndex-9 == i || cellIndex-1 == i || cellIndex+1 == i || cellIndex+9 == i || cellIndex+10 == i || cellIndex+11 == i)  &&  !treasure.includes(i)) {
+
+        openCell(i);
+
+      }
+
+    }
+
+
+  }
+}
+
+function openCell (cellIndex) {
+  const cell = cells[cellIndex - 1];
+
+  //conto le bombe in ogni cella
+  const closeBombsNum = countCloseBombs(cellIndex);
+    if (closeBombsNum === 0) {
+    //0 bombe clicco la cella
+    cell.classList.add('cell.clicked');
+
+  } else {
+    //bombe>0 clicco la cella e metto il numero
+    cell.classList.add('cell.clicked');
+    cell.innerHTML = '<p>'+closeBombsNum+'</p>';
+
+  }
+};
