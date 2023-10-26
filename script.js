@@ -86,7 +86,7 @@ for (let i = 1; i <= totalCells; i++) {
     } else {
       // Se non lo è...
       cell.classList.add('cell-clicked');
-      updateScore();
+      //updateScore();
 
       //inserisco il numero di bombe come testo nella cella
       //countCloseBombs(i);
@@ -135,7 +135,7 @@ const cells = document.querySelectorAll('.cell');
 FUNZIONI
 -------------------*/
 // Funzione per aggiornare il punteggio
-function updateScore() {
+/*function updateScore() {
   // Incremento lo score
   score++;
   // Lo inserisco nel contatore
@@ -143,7 +143,7 @@ function updateScore() {
 
   // Controlliamo se l'utente ha vinto
   if (score === maxScore) endGame(true);
-}
+}*/
 
 //aggiorno lo score quando trovo il tesoro
 function treasureScore () {
@@ -175,7 +175,7 @@ function endGame(isVictory) {
 // Funzione per ricaricare la pagina
 function playAgain() {
 
-  //se ho vinto con il tesoro
+  /*se ho vinto con il tesoro
   if (endGameScreen.classList.contains('win-treasure')){
 
     //recupero la finestra sorpresa
@@ -190,15 +190,15 @@ function playAgain() {
 
     })
 
-  } else {
+  } else {*/
 
     location.reload();
 
-  }
+  //}
 }
 
 // # BONUS
-// Funzione che rivela tutte le bombe
+// Funzione che rivela tutte le bombe e il tesoro
 function revealAll() {
   // Recupero tutte le celle
   const cells = document.querySelectorAll('.cell');
@@ -206,12 +206,14 @@ function revealAll() {
     // controllo se la cella è una bomba
     if (bombsList.includes(i)) {
       const bombReveal = cells[i - 1];
+      bombReveal.classList.remove('red-flag');
       bombReveal.classList.add('cell-bomb');
     }
 
     //controllo se la cella è il tesoro
     else if (treasure.includes(i)) {
       const treasureReveal = cells[i-1];
+      treasureReveal.classList.remove('red-flag');
       treasureReveal.classList.add('treasure');
     }
   }
@@ -265,16 +267,28 @@ function countCloseBombs(cellIndex) {
 //funzione per avviare il controllo delle celle cliccate
 function open () {
 
+  const clickedCells = [];
+
+  //prendo tutte le celle
   cells.forEach((cell, i) => {
-
+    
     const closeBombsNum = countCloseBombs(i + 1);
-        
-    if (cell.classList.contains('cell-clicked') && closeBombsNum === 0) {
+      
+    //se la cella è cliccata e non ha bombe vicine
+    if (cell.classList.contains('cell-clicked')) {
+      
+      clickedCells.push(i+1);
 
-      //cell.innerHTML = '<p>'+closeBombsNum+'</p>';
+      if (closeBombsNum === 0) {
+
+      //passo la cella alla funzione per "cliccare" le celle adiacenti
       clickAdiacentCells(i + 1);
+      }
     }
 
+    let score = clickedCells.length;
+    scoreCounter.innerText = String(score).padStart(5, 0);
+    if (score === maxScore) endGame(true);
     return;
 
   });
@@ -290,21 +304,24 @@ function clickAdiacentCells(cellIndex) {
     //celle tutto a dx
     if (cellIndex % 10 === 0) {
 
-      // prendo le 2 celle sopra, quella a dx e le 2 celle sotto che non siano un tesoro
+      // prendo le 2 celle sopra, quella a sx e le 2 celle sotto che non siano un tesoro
       if ((cellIndex-11 == i+1 || cellIndex-10 == i+1 || cellIndex-1 == i+1 || cellIndex+9 == i+1 || cellIndex+10 == i+1) && !treasure.includes(i+1)) {
 
-        cell.classList.add('cell-clicked');
+        //le clicco e le numero a meno che non siano uno 0
+        cell.classList.add('cell-clicked');        
         if (closeBombsNum !== 0) {
           cell.innerHTML = '<p>'+ closeBombsNum + '</p>';
         }
 
       }
+    // celle tutto a sx
     } else if ((cellIndex - 1) % 10 === 0) {
 
-      // prendo le 2 celle sopra, quella a sx e le 2 celle sotto che non sono il tesoro
+      // prendo le 2 celle sopra, quella a dx e le 2 celle sotto che non sono il tesoro
       if ((cellIndex-10 == i+1 || cellIndex-9 == i+1 || cellIndex+1 == i+1 || cellIndex+10 == i+1 || cellIndex+11 == i+1)  &&  !treasure.includes(i+1)) {
 
-        cell.classList.add('cell-clicked');
+        //le clicco e le numero a meno che non siano uno 0
+        cell.classList.add('cell-clicked');        
         if (closeBombsNum !== 0) {
           cell.innerHTML = '<p>'+ closeBombsNum + '</p>';
         }
@@ -314,7 +331,8 @@ function clickAdiacentCells(cellIndex) {
       // prendo le 3 celle sopra, quelle a dx, a sx e le 3 celle sotto che non sono un tesoro
       if ((cellIndex-11 == i+1 || cellIndex-10 == i+1 || cellIndex-9 == i+1 || cellIndex-1 == i+1 || cellIndex+1 == i+1 || cellIndex+9 == i+1 || cellIndex+10 == i+1 || cellIndex+11 == i+1)  &&  !treasure.includes(i+1)) {
 
-        cell.classList.add('cell-clicked');
+        //le clicco e le numero a meno che non siano uno 0
+        cell.classList.add('cell-clicked');        
         if (closeBombsNum !== 0) {
           cell.innerHTML = '<p>'+ closeBombsNum + '</p>';
         }
