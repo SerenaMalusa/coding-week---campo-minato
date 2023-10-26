@@ -163,9 +163,10 @@ function endGame(isVictory) {
     // Coloriamo di verde e cambiamo il messaggio
     endGameScreen.classList.add('win');
     endGameText.innerHTML = 'YOU<br>WIN';
-  } 
-  // Riveliamo le bombe e il tesoro
-  revealAll();
+  } else {
+    
+  }
+  
 
   // Mostriamo la schermata rimuovendo la classe
   endGameScreen.classList.remove('hidden');
