@@ -22,6 +22,11 @@ const treasure = [];
 let score = 0;
 let t;
 
+// prevengo il menu di default al tasto destro nella griglia (così posso mettere le bandiere rosse)
+grid.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+});
+
 // Generare tesoro random
 treasure.push (Math.floor(Math.random() * 100) +1);
 console.log ('tesoro=',treasure);
@@ -38,12 +43,6 @@ GRIGLIA E LOGICA DI GIOCO
 -----------------------*/
 let isCellEven = false;
 let isRowEven = false;
-
-
-// prevengo il menu di default al tasto destro nella griglia (così posso mettere le bandiere rosse)
-grid.addEventListener("contextmenu", (e) => {
-  e.preventDefault();
-});
 
 for (let i = 1; i <= totalCells; i++) {
   // Creo un elemento e gli do la classe 'cell'
