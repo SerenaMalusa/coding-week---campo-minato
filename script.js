@@ -9,6 +9,9 @@ const endGameScreen = document.querySelector('.end-game-screen');
 const endGameText = document.querySelector('.end-game-text');
 const playAgainButton = document.querySelector('.play-again');
 const gameContainer = document.querySelector('.game-container');
+const closeSurpriseBtn = document.querySelector('.surprise-btn');
+const surpriseModal = document.querySelector('.surprise');
+const getSurpriseBtn = document.querySelector('.get-surprise');
 
 // Preparo delle informazioni utili alla logica di gioco
 const totalCells = 100;
@@ -36,6 +39,8 @@ GRIGLIA E LOGICA DI GIOCO
 let isCellEven = false;
 let isRowEven = false;
 
+
+// prevengo il menu di default al tasto destro nella griglia (così posso mettere le bandiere rosse)
 grid.addEventListener("contextmenu", (e) => {
   e.preventDefault();
 });
@@ -67,38 +72,29 @@ for (let i = 1; i <= totalCells; i++) {
       // faccio apparire il tesoro
       cell.classList.add('treasure');
 
-      // aggiorno lo score a 9999 e faccio finire il gioco
-      treasureScore();
-      endGame(true);
-
-      // cambio lo sfondo della schermata 
-      endGameScreen.classList.add('win-treasure');
-      endGameText.innerHTML = 'MAX<br>SCORE!';
-                 
-      return;
+      winTreasure();
       
     }      
 
+    // Se è una bomba...
     if (bombsList.includes(i)) {
-      // Se è una bomba....
+      
       cell.classList.add('cell-bomb');
       endGame(false);
+
+    // Se non lo è...
     } else {
-      // Se non lo è...
       cell.classList.add('cell-clicked');
       //updateScore();
 
-      //inserisco il numero di bombe come testo nella cella
-      //countCloseBombs(i);
+      //conto il numero di bombe vicine e lo inserisco nelle celle che ne hanno almeno 1
       const closeBombsNum = countCloseBombs(i);
       //console.log('Bombe vicine=',closeBombsNum);
-
       if (closeBombsNum !== 0) {
         cell.innerHTML = '<p>'+closeBombsNum+'</p>';
       };
   
     }
-
         
   });
 
@@ -129,6 +125,7 @@ for (let i = 1; i <= totalCells; i++) {
   
 }
 
+//metto tutte le celle create in un array
 const cells = document.querySelectorAll('.cell');
 
 /* -------------------
@@ -145,6 +142,41 @@ FUNZIONI
   if (score === maxScore) endGame(true);
 }*/
 
+
+// Funzione per decretare la fine del gioco
+function endGame(isVictory) {
+
+  // blocco set interval
+  clearInterval(t);
+
+  if (isVictory === true) { 
+    // Coloriamo di verde e cambiamo il messaggio 
+    endGameScreen.classList.add('win');
+    endGameText.innerHTML = 'YOU<br>WIN';
+
+    //mostro il tesoro e le bombe non flaggate
+    revealTreasure();
+    revealBombs();
+
+  } else {
+
+    //mostro tutte le bombe e il tesoro
+    revealAllBombs();
+    revealTreasure();    
+  }
+  
+  // Mostriamo la schermata rimuovendo la classe
+  endGameScreen.classList.remove('hidden');
+}
+
+// Funzione per ricaricare la pagina
+function playAgain() {
+
+  location.reload();
+
+}
+
+// # BONUS
 //aggiorno lo score quando trovo il tesoro
 function treasureScore () {
   // porto lo score a 99999
@@ -155,51 +187,22 @@ function treasureScore () {
   scoreCounter.innerText = String(score).padStart(5, 0);
 }
 
-// Funzione per decretare la fine del gioco
-function endGame(isVictory) {
-  // blocco set interval
-  clearInterval(t);
-  if (isVictory === true) { 
-    // Coloriamo di verde e cambiamo il messaggio
-    endGameScreen.classList.add('win');
-    endGameText.innerHTML = 'YOU<br>WIN';
-  } else {
-    
-  }
-  
+//funzione per vittoria con tesoro
+function winTreasure () {
+  // aggiorno lo score a 9999 e faccio finire il gioco
+  treasureScore();
+  endGame(true);
 
-  // Mostriamo la schermata rimuovendo la classe
-  endGameScreen.classList.remove('hidden');
+  // cambio la schermata 
+  endGameScreen.classList.add('win-treasure');
+  endGameText.innerHTML = 'MAX<br>SCORE!';
+
+  //faccio apparire bottone della sorpresa
+  getSurpriseBtn.classList.remove('hidden');
 }
 
-// Funzione per ricaricare la pagina
-function playAgain() {
-
-  /*se ho vinto con il tesoro
-  if (endGameScreen.classList.contains('win-treasure')){
-
-    //recupero la finestra sorpresa
-    const rickrollWindow = document.querySelector('.rickrolling');
-    rickrollWindow.classList.remove('hidden');
-
-    //faccio funzionare il btn per la chiusura
-    const closeButton = document.querySelector('.rickrolling-btn');
-    closeButton.addEventListener('click', function() {
-
-      rickrollWindow.classList.add('hidden');
-
-    })
-
-  } else {*/
-
-    location.reload();
-
-  //}
-}
-
-// # BONUS
-// Funzione che rivela tutte le bombe e il tesoro
-function revealAll() {
+// Funzione che rivela tutte le bombe
+function revealAllBombs() {
   // Recupero tutte le celle
   const cells = document.querySelectorAll('.cell');
   for (let i = 1; i <= cells.length; i++) {
@@ -209,15 +212,37 @@ function revealAll() {
       bombReveal.classList.remove('red-flag');
       bombReveal.classList.add('cell-bomb');
     }
+  }
 
+}
+
+//Funzione che rivela  le bombe non flaggate
+function revealBombs() {
+  // Recupero tutte le celle
+  const cells = document.querySelectorAll('.cell');
+  for (let i = 1; i <= cells.length; i++) {
+    // controllo se la cella è una bomba
+    if (bombsList.includes(i)) {
+      const bombReveal = cells[i - 1];
+      bombReveal.classList.add('cell-bomb');
+    }
+  }
+
+}
+
+//funzione per rivelare il tesoro
+function revealTreasure() {
+  // Recupero tutte le celle
+  const cells = document.querySelectorAll('.cell');
+  for (let i = 1; i <= cells.length; i++) {
+    
     //controllo se la cella è il tesoro
-    else if (treasure.includes(i)) {
+    if (treasure.includes(i)) {
       const treasureReveal = cells[i-1];
       treasureReveal.classList.remove('red-flag');
       treasureReveal.classList.add('treasure');
     }
   }
-
 }
 
 // Funzione per contare le bombe vicine
@@ -265,21 +290,23 @@ function countCloseBombs(cellIndex) {
   return closeBombs.length;
 }
 
-//funzione per avviare il controllo delle celle cliccate
+//funzione per avviare il controllo delle celle cliccate in setInterval
 function open () {
 
+  //creo array vuoto che conterà le celle cliccate per il punteggio
   const clickedCells = [];
 
   //prendo tutte le celle
   cells.forEach((cell, i) => {
-    
-    const closeBombsNum = countCloseBombs(i + 1);
-      
-    //se la cella è cliccata e non ha bombe vicine
+        
+    //se la cella è cliccata
     if (cell.classList.contains('cell-clicked')) {
       
+      //agiungo cella all'array
       clickedCells.push(i+1);
 
+      //conto quante bombe vicine ha e solo se non ne ha
+      const closeBombsNum = countCloseBombs(i + 1);
       if (closeBombsNum === 0) {
 
       //passo la cella alla funzione per "cliccare" le celle adiacenti
@@ -287,6 +314,7 @@ function open () {
       }
     }
 
+    //aggiorno il punteggio
     let score = clickedCells.length;
     scoreCounter.innerText = String(score).padStart(5, 0);
     if (score === maxScore) endGame(true);
@@ -301,19 +329,13 @@ function clickAdiacentCells(cellIndex) {
   //riprendo tutte le celle
   cells.forEach((cell, i) => {
 
-    const closeBombsNum = countCloseBombs(i + 1);
     //celle tutto a dx
     if (cellIndex % 10 === 0) {
 
-      // prendo le 2 celle sopra, quella a sx e le 2 celle sotto che non siano un tesoro
+      // prendo le 2 celle sopra, quella a sx e le 2 celle sotto che non siano il tesoro
       if ((cellIndex-11 == i+1 || cellIndex-10 == i+1 || cellIndex-1 == i+1 || cellIndex+9 == i+1 || cellIndex+10 == i+1) && !treasure.includes(i+1)) {
 
-        //le clicco e le numero a meno che non siano uno 0
-        cell.classList.add('cell-clicked');        
-        if (closeBombsNum !== 0) {
-          cell.innerHTML = '<p>'+ closeBombsNum + '</p>';
-        }
-
+        clickCell(cell, i + 1);
       }
     // celle tutto a sx
     } else if ((cellIndex - 1) % 10 === 0) {
@@ -321,35 +343,60 @@ function clickAdiacentCells(cellIndex) {
       // prendo le 2 celle sopra, quella a dx e le 2 celle sotto che non sono il tesoro
       if ((cellIndex-10 == i+1 || cellIndex-9 == i+1 || cellIndex+1 == i+1 || cellIndex+10 == i+1 || cellIndex+11 == i+1)  &&  !treasure.includes(i+1)) {
 
-        //le clicco e le numero a meno che non siano uno 0
-        cell.classList.add('cell-clicked');        
-        if (closeBombsNum !== 0) {
-          cell.innerHTML = '<p>'+ closeBombsNum + '</p>';
-        }
+        clickCell(cell, i + 1);
       }
     } else {
 
       // prendo le 3 celle sopra, quelle a dx, a sx e le 3 celle sotto che non sono un tesoro
       if ((cellIndex-11 == i+1 || cellIndex-10 == i+1 || cellIndex-9 == i+1 || cellIndex-1 == i+1 || cellIndex+1 == i+1 || cellIndex+9 == i+1 || cellIndex+10 == i+1 || cellIndex+11 == i+1)  &&  !treasure.includes(i+1)) {
 
-        //le clicco e le numero a meno che non siano uno 0
-        cell.classList.add('cell-clicked');        
-        if (closeBombsNum !== 0) {
-          cell.innerHTML = '<p>'+ closeBombsNum + '</p>';
-        }
+        clickCell(cell, i + 1);
       }
     }
   });
 
 }
 
+//funzione che mostra le celle con numero
+function clickCell (cellNumber, cellIndex) {
+
+  //clicco la cella
+  cellNumber.classList.add('cell-clicked');
+
+  //conto quante bombe ci sono intorno alla cella e se non è uno zero 
+  const closeBombsNum = countCloseBombs(cellIndex);     
+  if (closeBombsNum !== 0) {
+    //inserisco il numero di bombe vicine nella cella
+    cellNumber.innerHTML = '<p>'+ closeBombsNum + '</p>';
+  }
+}
+
+//funzione per chiudere la finestra sorpresa
+function closeSurprise() {
+  surpriseModal.classList.add('hidden');
+}
+
+function manageSurprise() {
+   //se la modale è nascosta la mostro altrimenti la nascondo
+   if (surpriseModal.classList.contains('hidden')) {
+    surpriseModal.classList.remove('hidden');
+   } else {
+    surpriseModal.classList.add('hidden');
+   }
+}
+
 
 /* ---------------------
 EVENTI
 -----------------------*/
+//gestisco click per apparizione schermata di sorpresa
+getSurpriseBtn.addEventListener('click', manageSurprise);
+
+//gestisco click per chiudere schermata di sorpresa
+closeSurpriseBtn.addEventListener('click', manageSurprise);
 
 // Gestiamo il click sul tasto rigioca
 playAgainButton.addEventListener('click', playAgain);
 
 //Intervallo che deve controllare tutte le celle cliccate ogni tot millisecondi
-t = setInterval (open, 100);
+t = setInterval (open, 50);
