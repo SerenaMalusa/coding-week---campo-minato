@@ -188,18 +188,7 @@ button:hover {
 }
 
 .surprise-btn {
-	/*position: absolute;
-	top: 0;
-	right: 0;
-	border-radius: 50%;
-	height: 45px;
-	width: 45px;
-	text-align: center;
-	margin-bottom: 8px;
-	margin-top: 10px;
-	margin-right: 10px;*/
-
-	border: 2px solid rgb(0, 23, 50);
+	order: 2px solid rgb(0, 23, 50);
  	border-radius: 10px;
   	padding: 8px 12px;
   	font-size: 20px;
