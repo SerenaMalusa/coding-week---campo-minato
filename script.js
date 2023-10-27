@@ -103,7 +103,7 @@ for (let i = 1; i <= totalCells; i++) {
     // ! Controllo che la cella non sia stata già cliccata
     if (cell.classList.contains('cell-clicked')) {
 
-      return
+      return;
 
     } else if (cell.classList.contains('red-flag')) {
 
@@ -176,20 +176,15 @@ function playAgain() {
 }
 
 // # BONUS
-//aggiorno lo score quando trovo il tesoro
-function treasureScore () {
-  // porto lo score a 99999
-  score = 99999;
-  // console.log(score);
-  
-  // Lo metto nel contatore
-  scoreCounter.innerText = String(score).padStart(5, 0);
-}
-
 //funzione per vittoria con tesoro
 function winTreasure () {
-  // aggiorno lo score a 9999 e faccio finire il gioco
-  treasureScore();
+  
+  // porto lo score a 99999 e lo metto nel contatore
+  score = 99999;
+  // console.log(score);
+  scoreCounter.innerText = String(score).padStart(5, 0);
+
+  //faccio finire il gioco
   endGame(true);
 
   // cambio la schermata 
@@ -256,7 +251,7 @@ function countCloseBombs(cellIndex) {
       // se le 2 celle sopra, quella a dx e le 2 celle sotto sono in bombsList
       if ((cellIndex-11 == i || cellIndex-10 == i || cellIndex-1 == i || cellIndex+9 == i || cellIndex+10 == i)  &&  bombsList.includes(i)) {
 
-        //le aggiongo a closeBombs
+        //le aggiungo a closeBombs
         closeBombs.push(i);
 
       } 
@@ -266,7 +261,7 @@ function countCloseBombs(cellIndex) {
       // se le 2 celle sopra, quella a sx e le 2 celle sotto sono in bombsList
       if ((cellIndex-10 == i || cellIndex-9 == i || cellIndex+1 == i || cellIndex+10 == i || cellIndex+11 == i)  &&  bombsList.includes(i)) {
 
-        //le aggiongo a closeBombs
+        //le aggiungo a closeBombs
         closeBombs.push(i);
 
       } 
@@ -276,7 +271,7 @@ function countCloseBombs(cellIndex) {
       // se le 3 celle sopra, quelle a dx, a sx e le 3 celle sotto sono in bombsList
       if ((cellIndex-11 == i || cellIndex-10 == i || cellIndex-9 == i || cellIndex-1 == i || cellIndex+1 == i || cellIndex+9 == i || cellIndex+10 == i || cellIndex+11 == i)  &&  bombsList.includes(i)) {
 
-        //le aggiongo a closeBombs
+        //le aggiungo a closeBombs
         closeBombs.push(i);
 
       } 
@@ -285,7 +280,7 @@ function countCloseBombs(cellIndex) {
 
   }
 
-  //conto solo quante bombe ci sono
+  //conto quante bombe ci sono
   return closeBombs.length;
 }
 
@@ -370,13 +365,9 @@ function clickCell (cellNumber, cellIndex) {
   }
 }
 
-//funzione per chiudere la finestra sorpresa
-function closeSurprise() {
-  surpriseModal.classList.add('hidden');
-}
-
+//funzione per gestire la finestra sorpresa
 function manageSurprise() {
-   //se la modale è nascosta la mostro altrimenti la nascondo
+   //se la modale è nascosta la mostro, altrimenti la nascondo
    if (surpriseModal.classList.contains('hidden')) {
     surpriseModal.classList.remove('hidden');
    } else {
