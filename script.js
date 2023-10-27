@@ -198,7 +198,7 @@ function winTreasure () {
 // Funzione che rivela tutte le bombe
 function revealAllBombs() {
   // Recupero tutte le celle
-  const cells = document.querySelectorAll('.cell');
+  //const cells = document.querySelectorAll('.cell');
   for (let i = 1; i <= cells.length; i++) {
     // controllo se la cella è una bomba
     if (bombsList.includes(i)) {
@@ -213,7 +213,6 @@ function revealAllBombs() {
 //Funzione che rivela  le bombe non flaggate
 function revealBombs() {
   // Recupero tutte le celle
-  const cells = document.querySelectorAll('.cell');
   for (let i = 1; i <= cells.length; i++) {
     // controllo se la cella è una bomba
     if (bombsList.includes(i)) {
@@ -227,7 +226,6 @@ function revealBombs() {
 //funzione per rivelare il tesoro
 function revealTreasure() {
   // Recupero tutte le celle
-  const cells = document.querySelectorAll('.cell');
   for (let i = 1; i <= cells.length; i++) {
     
     //controllo se la cella è il tesoro
@@ -373,6 +371,7 @@ function manageSurprise() {
    } else {
     surpriseModal.classList.add('hidden');
    }
+
 }
 
 
