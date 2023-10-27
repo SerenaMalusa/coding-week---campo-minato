@@ -169,7 +169,7 @@ button:hover {
 
 	width: 600px;
 	height: 400px;
-	background-color: rgba(76, 41, 202, 0.8);
+	background-color: rgba(81, 46, 211, 0.8);
 
 	border:  2px solid rgb(0, 23, 50);
 	border-radius: 20px;
@@ -192,6 +192,10 @@ button:hover {
  	border-radius: 10px;
   	padding: 8px 12px;
   	font-size: 20px;
+
+	width: 100px;
+
+	font-family: 'Darker Grotesque', sans-serif;
 }
 
 /* classe hidden*/
