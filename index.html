@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>Campo Minato</title>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@700&family=Press+Start+2P&display=swap"
+    rel="stylesheet">
+
+  <!-- Foglio di stile -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- viewport -->
+  <meta name="viewport" content="width=device-width, initial scale=1.0">
+</head>
+
+<body>
+  <div class="container">
+    <div class="game-container">
+      <!-- Pannello informazioni di gioco -->
+      <div class="game-panel">
+        <h1>Campo Minato</h1>
+
+        <!-- Punteggio -->
+        <div class="score">
+          <span class="score-label">SCORE</span>
+          <span class="score-counter">00000</span>
+        </div>
+      </div>
+
+      <!-- Tabellone di gioco -->
+      <div class="game-board">
+        <div class="grid"></div>
+
+        <!-- Schermata di fine gioco -->
+        <div class="end-game-screen hidden">
+          <h2 class="end-game-text">Game<br>Over</h2>
+          <button class="end-game-btn get-surprise hidden">Prendi il tesoro</button>
+          <button class="end-game-btn play-again">Gioca ancora</button>
+        </div>
+      </div>
+      
+      <!-- scermata di sorpresa-->
+      <div class="surprise hidden">
+          <div class="surprise-img">
+          <img src="images/rickrolling.gif" alt="you have been double rickrolled!!!">
+        </div>
+        <button class="surprise-btn">CHIUDI</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Javascript -->
+  <script type="text/Javascript" src="script.js"></script>
+</body>
+
+
+</html>
